@@ -27,6 +27,10 @@ sudo mkdir /var/ftp/symul
 sudo chown symulftp:symulftp /var/ftp/symul
 sudo chmod 755 /var/ftp/symul
 ```
+**Notes:**
+
+- `/var/ftp` must be owned by root and not writable by others — required for `ChrootDirectory`.
+- The actual SFTP folder (`symul`) is owned by the user so they can read/write.
 
 ---
 
@@ -48,6 +52,9 @@ Match User symulftp
 *Explanation:*
 - `ChrootDirectory /var/ftp` → user sees `/var/ftp` as root (`/` inside SFTP).
 - `ForceCommand internal-sftp` → disables SSH shell access.
+- `AllowTcpForwarding no` & `X11Forwarding no` → improve security.
+
+💡 **Tip:** If you need to give access to multiple directories, you can create subfolders under `/var/ftp` and mount or symlink them inside, but `/var/ftp` itself must remain root-owned.
 
 ---
 
