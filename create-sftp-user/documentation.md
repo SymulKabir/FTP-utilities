@@ -32,6 +32,34 @@ sudo chmod 755 /var/ftp/symul
 - `/var/ftp` must be owned by root and not writable by others — required for `ChrootDirectory`.
 - The actual SFTP folder (`symul`) is owned by the user so they can read/write.
 
+
+#### 🧩 (Optional) Mount Another Directory Inside /var/ftp/symul
+If you want to give the SFTP user access to files or directories located elsewhere on the system, you can mount (bind) them inside the user's chroot folder.
+**Example:**
+Let’s say you have a directory `/root/server-files/symul` that you want the SFTP user symulftp to access inside `/var/ftp/symul`.
+```bash
+sudo mount --bind /root/server-files/symul /var/ftp/symul
+```
+**Check ownership and permissions**
+```bash
+sudo chown -R symulftp:symulftp /var/ftp/symul
+sudo chmod 755 /var/ftp/symul
+```
+
+**Make it persistent after reboot**
+Edit `/etc/fstab`:
+```bash
+sudo nano /etc/fstab
+```
+Add this line at the bottom:
+```nano
+/root/server-files/symul /var/ftp/symul  none  bind  0  0
+```
+**If you need to unmount**
+```bash
+sudo umount /var/ftp/symul
+```
+
 ---
 
 #### 3️⃣ Restrict the user to SFTP only
